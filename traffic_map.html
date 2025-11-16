@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_8b35a8b356eda48ed391c7284675e28d {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js"></script>
+</head>
+<body>
+    
+    
+        <div style="position: fixed; 
+                    bottom: 50px; left: 50px; width: 200px; height: 120px; 
+                    background-color: white; border:2px solid grey; z-index:9999; 
+                    font-size:14px; padding: 10px">
+        <h4 style="margin-top: 0;">Congestion Levels</h4>
+        <p><i class="fa fa-circle" style="color:green"></i> Low: Speed > 40 km/h</p>
+        <p><i class="fa fa-circle" style="color:orange"></i> Medium: 20-40 km/h</p>
+        <p><i class="fa fa-circle" style="color:red"></i> High: Speed < 20 km/h</p>
+        <p style="font-size: 11px; margin-top: 5px;">Marker size = Vehicle count</p>
+        </div>
+        
+    
+    <div style="position: fixed; 
+                top: 10px; right: 10px; width: 220px; height: auto; 
+                background-color: white; border:2px solid grey; z-index:9999; 
+                font-size:12px; padding: 10px; border-radius: 5px;">
+    <h4 style="margin-top: 0;">Statistics</h4>
+    <p><b>Total Locations:</b> 30</p>
+    <p>🟢 Low: 7</p>
+    <p>🟡 Medium: 13</p>
+    <p>🔴 High: 10</p>
+    </div>
+    
+    
+            <div class="folium-map" id="map_8b35a8b356eda48ed391c7284675e28d" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_8b35a8b356eda48ed391c7284675e28d = L.map(
+                "map_8b35a8b356eda48ed391c7284675e28d",
+                {
+                    center: [12.973488733333335, 77.59595543333334],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 14,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_da1186e110cff28dadef4df28e6dfa9e = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_da1186e110cff28dadef4df28e6dfa9e.addTo(map_8b35a8b356eda48ed391c7284675e28d);
+        
+    
+            var tile_layer_c4ec1782f733dac3d1316f16be6d890d = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 20, "maxZoom": 20, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abcd", "tms": false}
+            );
+        
+    
+            tile_layer_c4ec1782f733dac3d1316f16be6d890d.addTo(map_8b35a8b356eda48ed391c7284675e28d);
+        
+    
+            var tile_layer_8e55a2345423b636bc3a33f2f76255f2 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 20, "maxZoom": 20, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abcd", "tms": false}
+            );
+        
+    
+            tile_layer_8e55a2345423b636bc3a33f2f76255f2.addTo(map_8b35a8b356eda48ed391c7284675e28d);
+        
+    
+            var marker_cluster_bd288afb21a4c28924df144fada1c677 = L.markerClusterGroup(
+                {}
+            );
+        
+    
+            var circle_marker_058ecb29f45a64ac749c59ca7dc50823 = L.circleMarker(
+                [12.974979, 77.603199],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_8c90a7b0b774bc31b4dd3f1f0611e3c5 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_ca580c082e992fdc142a4d1f4f35f5bd = $(`<div id="html_ca580c082e992fdc142a4d1f4f35f5bd" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 9.67 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 52</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.974979</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.603199</p>         </div>         </div>`)[0];
+                popup_8c90a7b0b774bc31b4dd3f1f0611e3c5.setContent(html_ca580c082e992fdc142a4d1f4f35f5bd);
+            
+        
+
+        circle_marker_058ecb29f45a64ac749c59ca7dc50823.bindPopup(popup_8c90a7b0b774bc31b4dd3f1f0611e3c5)
+        ;
+
+        
+    
+    
+            circle_marker_058ecb29f45a64ac749c59ca7dc50823.bindTooltip(
+                `<div>
+                     High: 9.7 km/h, 52 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_8231fb85b7555a9e7b6230377e3442f6 = L.circleMarker(
+                [12.970474, 77.601984],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.4, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_5459521b124261f292aeaa068843d147 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_e0543ea412ccc9939ce58c6578a91c94 = $(`<div id="html_e0543ea412ccc9939ce58c6578a91c94" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 8.65 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 42</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.970474</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.601984</p>         </div>         </div>`)[0];
+                popup_5459521b124261f292aeaa068843d147.setContent(html_e0543ea412ccc9939ce58c6578a91c94);
+            
+        
+
+        circle_marker_8231fb85b7555a9e7b6230377e3442f6.bindPopup(popup_5459521b124261f292aeaa068843d147)
+        ;
+
+        
+    
+    
+            circle_marker_8231fb85b7555a9e7b6230377e3442f6.bindTooltip(
+                `<div>
+                     High: 8.7 km/h, 42 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_95c97b8ca4675cad07bf9d219cd980c7 = L.circleMarker(
+                [12.977412, 77.594391],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_c58f22dca67aa2c5540fd4961953b438 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_1f76c65b7f18df602d20f128024a7615 = $(`<div id="html_1f76c65b7f18df602d20f128024a7615" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 6.66 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 55</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.977412</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.594391</p>         </div>         </div>`)[0];
+                popup_c58f22dca67aa2c5540fd4961953b438.setContent(html_1f76c65b7f18df602d20f128024a7615);
+            
+        
+
+        circle_marker_95c97b8ca4675cad07bf9d219cd980c7.bindPopup(popup_c58f22dca67aa2c5540fd4961953b438)
+        ;
+
+        
+    
+    
+            circle_marker_95c97b8ca4675cad07bf9d219cd980c7.bindTooltip(
+                `<div>
+                     High: 6.7 km/h, 55 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_c63e6aa07b2ade37b80aae74229bfc88 = L.circleMarker(
+                [12.977051, 77.596117],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.4, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_7ebd364ebf99fe5624017aaa0daa9b15 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_5334baf1ded4adf47ca1936cd163555c = $(`<div id="html_5334baf1ded4adf47ca1936cd163555c" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 26.80 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 27</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.977051</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.596117</p>         </div>         </div>`)[0];
+                popup_7ebd364ebf99fe5624017aaa0daa9b15.setContent(html_5334baf1ded4adf47ca1936cd163555c);
+            
+        
+
+        circle_marker_c63e6aa07b2ade37b80aae74229bfc88.bindPopup(popup_7ebd364ebf99fe5624017aaa0daa9b15)
+        ;
+
+        
+    
+    
+            circle_marker_c63e6aa07b2ade37b80aae74229bfc88.bindTooltip(
+                `<div>
+                     Medium: 26.8 km/h, 27 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_f54c4a3c7eba49a2e97f63e06cc00a03 = L.circleMarker(
+                [12.970592, 77.597696],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.4, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_b4431ec1f996b690a27b18ded468613c = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_840c6fa1d217d5d5408dd78e3bdc1c0b = $(`<div id="html_840c6fa1d217d5d5408dd78e3bdc1c0b" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 41.65 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 27</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.970592</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.597696</p>         </div>         </div>`)[0];
+                popup_b4431ec1f996b690a27b18ded468613c.setContent(html_840c6fa1d217d5d5408dd78e3bdc1c0b);
+            
+        
+
+        circle_marker_f54c4a3c7eba49a2e97f63e06cc00a03.bindPopup(popup_b4431ec1f996b690a27b18ded468613c)
+        ;
+
+        
+    
+    
+            circle_marker_f54c4a3c7eba49a2e97f63e06cc00a03.bindTooltip(
+                `<div>
+                     Medium: 41.6 km/h, 27 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_5178aab5802f48e916660ac71d68be27 = L.circleMarker(
+                [12.969514, 77.596802],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.6, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_5d66ce630d77a9c48a0bb38876552006 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_b67aa47cf01a60c824795d6e9e376230 = $(`<div id="html_b67aa47cf01a60c824795d6e9e376230" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 13.54 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 48</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.969514</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.596802</p>         </div>         </div>`)[0];
+                popup_5d66ce630d77a9c48a0bb38876552006.setContent(html_b67aa47cf01a60c824795d6e9e376230);
+            
+        
+
+        circle_marker_5178aab5802f48e916660ac71d68be27.bindPopup(popup_5d66ce630d77a9c48a0bb38876552006)
+        ;
+
+        
+    
+    
+            circle_marker_5178aab5802f48e916660ac71d68be27.bindTooltip(
+                `<div>
+                     High: 13.5 km/h, 48 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_73c43476e6ad733fafd9b8ff80689d92 = L.circleMarker(
+                [12.977251, 77.59265],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_011104a0b359c74bc778f69711437aac = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_da554adaf8279e701514c19b8d5156a6 = $(`<div id="html_da554adaf8279e701514c19b8d5156a6" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 12.11 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 55</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.977251</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.592650</p>         </div>         </div>`)[0];
+                popup_011104a0b359c74bc778f69711437aac.setContent(html_da554adaf8279e701514c19b8d5156a6);
+            
+        
+
+        circle_marker_73c43476e6ad733fafd9b8ff80689d92.bindPopup(popup_011104a0b359c74bc778f69711437aac)
+        ;
+
+        
+    
+    
+            circle_marker_73c43476e6ad733fafd9b8ff80689d92.bindTooltip(
+                `<div>
+                     High: 12.1 km/h, 55 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_1da10ae49a10eb53afce5d65256df90f = L.circleMarker(
+                [12.972238, 77.597418],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.2, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_cfd6dda16ff797741b30ab8da081d85c = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_3dfb8a57d7b34f48d7b507583aaa59cb = $(`<div id="html_3dfb8a57d7b34f48d7b507583aaa59cb" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: green;">Low Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 54.36 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 21</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.972238</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.597418</p>         </div>         </div>`)[0];
+                popup_cfd6dda16ff797741b30ab8da081d85c.setContent(html_3dfb8a57d7b34f48d7b507583aaa59cb);
+            
+        
+
+        circle_marker_1da10ae49a10eb53afce5d65256df90f.bindPopup(popup_cfd6dda16ff797741b30ab8da081d85c)
+        ;
+
+        
+    
+    
+            circle_marker_1da10ae49a10eb53afce5d65256df90f.bindTooltip(
+                `<div>
+                     Low: 54.4 km/h, 21 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_18221be72ee80d250ac4dcf712fe5a48 = L.circleMarker(
+                [12.971703, 77.599045],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.8, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_644e99dac62466afe289d1b570e82e09 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_35c151b7a6019fb9fc65adf70c67def8 = $(`<div id="html_35c151b7a6019fb9fc65adf70c67def8" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: green;">Low Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 49.66 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 19</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.971703</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.599045</p>         </div>         </div>`)[0];
+                popup_644e99dac62466afe289d1b570e82e09.setContent(html_35c151b7a6019fb9fc65adf70c67def8);
+            
+        
+
+        circle_marker_18221be72ee80d250ac4dcf712fe5a48.bindPopup(popup_644e99dac62466afe289d1b570e82e09)
+        ;
+
+        
+    
+    
+            circle_marker_18221be72ee80d250ac4dcf712fe5a48.bindTooltip(
+                `<div>
+                     Low: 49.7 km/h, 19 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_562606cb16ad47af0c6c29440ff4e164 = L.circleMarker(
+                [12.976411, 77.591591],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.0, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_acc725f04e02912704a823f397449fe8 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_063ee2005e5ca682b9434371260269d9 = $(`<div id="html_063ee2005e5ca682b9434371260269d9" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: green;">Low Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 44.68 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 10</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.976411</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.591591</p>         </div>         </div>`)[0];
+                popup_acc725f04e02912704a823f397449fe8.setContent(html_063ee2005e5ca682b9434371260269d9);
+            
+        
+
+        circle_marker_562606cb16ad47af0c6c29440ff4e164.bindPopup(popup_acc725f04e02912704a823f397449fe8)
+        ;
+
+        
+    
+    
+            circle_marker_562606cb16ad47af0c6c29440ff4e164.bindTooltip(
+                `<div>
+                     Low: 44.7 km/h, 10 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_e4ae5268aed54d170ffb687fafd2522b = L.circleMarker(
+                [12.970521, 77.592671],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.2, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_00ec05efa9c055861ee2d6af8d3d382c = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_73a7ffb3a9590b5a69cf0a1e20c14a17 = $(`<div id="html_73a7ffb3a9590b5a69cf0a1e20c14a17" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 58.82 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 26</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.970521</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.592671</p>         </div>         </div>`)[0];
+                popup_00ec05efa9c055861ee2d6af8d3d382c.setContent(html_73a7ffb3a9590b5a69cf0a1e20c14a17);
+            
+        
+
+        circle_marker_e4ae5268aed54d170ffb687fafd2522b.bindPopup(popup_00ec05efa9c055861ee2d6af8d3d382c)
+        ;
+
+        
+    
+    
+            circle_marker_e4ae5268aed54d170ffb687fafd2522b.bindTooltip(
+                `<div>
+                     Medium: 58.8 km/h, 26 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_2d0a6a8806cff2f70b1d048c9aa65678 = L.circleMarker(
+                [12.97666, 77.595141],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.8, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_4f18864f1220526db97e408d36916a5f = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_72a803b896253cb2a63f4de96478cd2e = $(`<div id="html_72a803b896253cb2a63f4de96478cd2e" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 37.45 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 29</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.976660</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.595141</p>         </div>         </div>`)[0];
+                popup_4f18864f1220526db97e408d36916a5f.setContent(html_72a803b896253cb2a63f4de96478cd2e);
+            
+        
+
+        circle_marker_2d0a6a8806cff2f70b1d048c9aa65678.bindPopup(popup_4f18864f1220526db97e408d36916a5f)
+        ;
+
+        
+    
+    
+            circle_marker_2d0a6a8806cff2f70b1d048c9aa65678.bindTooltip(
+                `<div>
+                     Medium: 37.5 km/h, 29 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_9c30511531d4c24bff1729cb8bda58f0 = L.circleMarker(
+                [12.973265, 77.597423],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_6fe83a5edbc431ad6aad16d6c75b057e = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_6a75a4856b10d8f4a91476e1d684d330 = $(`<div id="html_6a75a4856b10d8f4a91476e1d684d330" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 6.71 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 53</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.973265</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.597423</p>         </div>         </div>`)[0];
+                popup_6fe83a5edbc431ad6aad16d6c75b057e.setContent(html_6a75a4856b10d8f4a91476e1d684d330);
+            
+        
+
+        circle_marker_9c30511531d4c24bff1729cb8bda58f0.bindPopup(popup_6fe83a5edbc431ad6aad16d6c75b057e)
+        ;
+
+        
+    
+    
+            circle_marker_9c30511531d4c24bff1729cb8bda58f0.bindTooltip(
+                `<div>
+                     High: 6.7 km/h, 53 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_3d4f6b99cb6c8dba822157e68f495cdc = L.circleMarker(
+                [12.976348, 77.592808],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.2, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_4b989cfdadeacd6c86aa31c900145fa9 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_c6739b9c1a5c0f5564b784e9cfdb8fea = $(`<div id="html_c6739b9c1a5c0f5564b784e9cfdb8fea" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: green;">Low Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 47.78 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 11</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.976348</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.592808</p>         </div>         </div>`)[0];
+                popup_4b989cfdadeacd6c86aa31c900145fa9.setContent(html_c6739b9c1a5c0f5564b784e9cfdb8fea);
+            
+        
+
+        circle_marker_3d4f6b99cb6c8dba822157e68f495cdc.bindPopup(popup_4b989cfdadeacd6c86aa31c900145fa9)
+        ;
+
+        
+    
+    
+            circle_marker_3d4f6b99cb6c8dba822157e68f495cdc.bindTooltip(
+                `<div>
+                     Low: 47.8 km/h, 11 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_d7e0c1de994a27d8b189103142578863 = L.circleMarker(
+                [12.976669, 77.597436],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.0, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_2c2e5f881503c790a69701470ea0b2c0 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_f248ca76002f38dc04a72db8a0a6c535 = $(`<div id="html_f248ca76002f38dc04a72db8a0a6c535" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 44.32 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 25</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.976669</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.597436</p>         </div>         </div>`)[0];
+                popup_2c2e5f881503c790a69701470ea0b2c0.setContent(html_f248ca76002f38dc04a72db8a0a6c535);
+            
+        
+
+        circle_marker_d7e0c1de994a27d8b189103142578863.bindPopup(popup_2c2e5f881503c790a69701470ea0b2c0)
+        ;
+
+        
+    
+    
+            circle_marker_d7e0c1de994a27d8b189103142578863.bindTooltip(
+                `<div>
+                     Medium: 44.3 km/h, 25 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_8b2994c077ff1f5ef627c89368a24403 = L.circleMarker(
+                [12.977333, 77.59742],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.6, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_85c8e96b9892203c117507218e2ac61c = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_0bd82466cbb08b0279aeacf4724207a7 = $(`<div id="html_0bd82466cbb08b0279aeacf4724207a7" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: green;">Low Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 47.87 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 18</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.977333</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.597420</p>         </div>         </div>`)[0];
+                popup_85c8e96b9892203c117507218e2ac61c.setContent(html_0bd82466cbb08b0279aeacf4724207a7);
+            
+        
+
+        circle_marker_8b2994c077ff1f5ef627c89368a24403.bindPopup(popup_85c8e96b9892203c117507218e2ac61c)
+        ;
+
+        
+    
+    
+            circle_marker_8b2994c077ff1f5ef627c89368a24403.bindTooltip(
+                `<div>
+                     Low: 47.9 km/h, 18 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_e74f48b5e24172a07eb9adac314e249b = L.circleMarker(
+                [12.969389, 77.591666],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.4, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_9835ac7076f74185ef81fd8f9695a914 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_b1f7c41ebdc74c8aec383d320d7de7b4 = $(`<div id="html_b1f7c41ebdc74c8aec383d320d7de7b4" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 36.94 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 37</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.969389</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.591666</p>         </div>         </div>`)[0];
+                popup_9835ac7076f74185ef81fd8f9695a914.setContent(html_b1f7c41ebdc74c8aec383d320d7de7b4);
+            
+        
+
+        circle_marker_e74f48b5e24172a07eb9adac314e249b.bindPopup(popup_9835ac7076f74185ef81fd8f9695a914)
+        ;
+
+        
+    
+    
+            circle_marker_e74f48b5e24172a07eb9adac314e249b.bindTooltip(
+                `<div>
+                     Medium: 36.9 km/h, 37 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_36b656abf27f228d1caddb5eaeda2214 = L.circleMarker(
+                [12.975654, 77.603126],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.8, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_cf7e4a262ae31d4a1ffe9a2bf09b8b54 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_44db675c147974d80d5ff8407119f158 = $(`<div id="html_44db675c147974d80d5ff8407119f158" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 25.55 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 44</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.975654</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.603126</p>         </div>         </div>`)[0];
+                popup_cf7e4a262ae31d4a1ffe9a2bf09b8b54.setContent(html_44db675c147974d80d5ff8407119f158);
+            
+        
+
+        circle_marker_36b656abf27f228d1caddb5eaeda2214.bindPopup(popup_cf7e4a262ae31d4a1ffe9a2bf09b8b54)
+        ;
+
+        
+    
+    
+            circle_marker_36b656abf27f228d1caddb5eaeda2214.bindTooltip(
+                `<div>
+                     Medium: 25.6 km/h, 44 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_e13847b8524f4b986082e432e55504b3 = L.circleMarker(
+                [12.972617, 77.592259],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.2, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_c2f73081d013c612f9c6562840e0e80a = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_011fbcdcc1222ee876378260ca7f100a = $(`<div id="html_011fbcdcc1222ee876378260ca7f100a" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 28.19 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 41</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.972617</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.592259</p>         </div>         </div>`)[0];
+                popup_c2f73081d013c612f9c6562840e0e80a.setContent(html_011fbcdcc1222ee876378260ca7f100a);
+            
+        
+
+        circle_marker_e13847b8524f4b986082e432e55504b3.bindPopup(popup_c2f73081d013c612f9c6562840e0e80a)
+        ;
+
+        
+    
+    
+            circle_marker_e13847b8524f4b986082e432e55504b3.bindTooltip(
+                `<div>
+                     Medium: 28.2 km/h, 41 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_51533cb8c6606b7ad8babde35dd71c22 = L.circleMarker(
+                [12.970613, 77.599976],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.2, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_fd37aa5aefb5869196201cddce574835 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_b3e46cfbadfba2a4ed3960c40de4a377 = $(`<div id="html_b3e46cfbadfba2a4ed3960c40de4a377" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 16.72 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 41</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.970613</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.599976</p>         </div>         </div>`)[0];
+                popup_fd37aa5aefb5869196201cddce574835.setContent(html_b3e46cfbadfba2a4ed3960c40de4a377);
+            
+        
+
+        circle_marker_51533cb8c6606b7ad8babde35dd71c22.bindPopup(popup_fd37aa5aefb5869196201cddce574835)
+        ;
+
+        
+    
+    
+            circle_marker_51533cb8c6606b7ad8babde35dd71c22.bindTooltip(
+                `<div>
+                     High: 16.7 km/h, 41 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_1e5bd1edea312b3cee37a1643a652b01 = L.circleMarker(
+                [12.968518, 77.592977],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.8, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_3260ffa8cb251cad47a62a3c4fb7c8b2 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_e7996e482fc27cc0143d384b836f2b6c = $(`<div id="html_e7996e482fc27cc0143d384b836f2b6c" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 23.13 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 39</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.968518</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.592977</p>         </div>         </div>`)[0];
+                popup_3260ffa8cb251cad47a62a3c4fb7c8b2.setContent(html_e7996e482fc27cc0143d384b836f2b6c);
+            
+        
+
+        circle_marker_1e5bd1edea312b3cee37a1643a652b01.bindPopup(popup_3260ffa8cb251cad47a62a3c4fb7c8b2)
+        ;
+
+        
+    
+    
+            circle_marker_1e5bd1edea312b3cee37a1643a652b01.bindTooltip(
+                `<div>
+                     Medium: 23.1 km/h, 39 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_52b96dcdaeeaeed2aef555cfd3ffc73a = L.circleMarker(
+                [12.974166, 77.595544],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.4, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_557f93b6368bbf13b9ffc34e1488da07 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_820088a9e676222c622218fc83892ee1 = $(`<div id="html_820088a9e676222c622218fc83892ee1" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 26.45 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 42</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.974166</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.595544</p>         </div>         </div>`)[0];
+                popup_557f93b6368bbf13b9ffc34e1488da07.setContent(html_820088a9e676222c622218fc83892ee1);
+            
+        
+
+        circle_marker_52b96dcdaeeaeed2aef555cfd3ffc73a.bindPopup(popup_557f93b6368bbf13b9ffc34e1488da07)
+        ;
+
+        
+    
+    
+            circle_marker_52b96dcdaeeaeed2aef555cfd3ffc73a.bindTooltip(
+                `<div>
+                     Medium: 26.4 km/h, 42 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_5be742d9cfa1cecc48ff3b7ab1fde191 = L.circleMarker(
+                [12.971021, 77.591954],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.2, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_52465b0393192cee86a4533a79a987d3 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_dfc95e054da8db9c839d2eb152adb9c5 = $(`<div id="html_dfc95e054da8db9c839d2eb152adb9c5" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 23.37 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 26</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.971021</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.591954</p>         </div>         </div>`)[0];
+                popup_52465b0393192cee86a4533a79a987d3.setContent(html_dfc95e054da8db9c839d2eb152adb9c5);
+            
+        
+
+        circle_marker_5be742d9cfa1cecc48ff3b7ab1fde191.bindPopup(popup_52465b0393192cee86a4533a79a987d3)
+        ;
+
+        
+    
+    
+            circle_marker_5be742d9cfa1cecc48ff3b7ab1fde191.bindTooltip(
+                `<div>
+                     Medium: 23.4 km/h, 26 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_f27e20a07ed49448fb09b189adb2449f = L.circleMarker(
+                [12.971332, 77.592788],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.8, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_8b9f15ca9baa7a31ec181679142f4786 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_687ed8d5c55f6d0f76ce2f96dff07dc5 = $(`<div id="html_687ed8d5c55f6d0f76ce2f96dff07dc5" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 33.77 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 34</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.971332</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.592788</p>         </div>         </div>`)[0];
+                popup_8b9f15ca9baa7a31ec181679142f4786.setContent(html_687ed8d5c55f6d0f76ce2f96dff07dc5);
+            
+        
+
+        circle_marker_f27e20a07ed49448fb09b189adb2449f.bindPopup(popup_8b9f15ca9baa7a31ec181679142f4786)
+        ;
+
+        
+    
+    
+            circle_marker_f27e20a07ed49448fb09b189adb2449f.bindTooltip(
+                `<div>
+                     Medium: 33.8 km/h, 34 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_e5d31f67be81e82a3b6054ad46617ff5 = L.circleMarker(
+                [12.971896, 77.599832],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.2, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_a61612edbae56b1f50380c70da2a4784 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_cfb8b657778e76513e0a5b2286509e7f = $(`<div id="html_cfb8b657778e76513e0a5b2286509e7f" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: green;">Low Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 42.11 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 21</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.971896</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.599832</p>         </div>         </div>`)[0];
+                popup_a61612edbae56b1f50380c70da2a4784.setContent(html_cfb8b657778e76513e0a5b2286509e7f);
+            
+        
+
+        circle_marker_e5d31f67be81e82a3b6054ad46617ff5.bindPopup(popup_a61612edbae56b1f50380c70da2a4784)
+        ;
+
+        
+    
+    
+            circle_marker_e5d31f67be81e82a3b6054ad46617ff5.bindTooltip(
+                `<div>
+                     Low: 42.1 km/h, 21 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_3acb394523758c53fb33b6c6aaf27b29 = L.circleMarker(
+                [12.975679, 77.591831],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.0, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_c4488ca0f845671d4233014096c95c78 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_264bdd60d8777f52290ba9ec39c99459 = $(`<div id="html_264bdd60d8777f52290ba9ec39c99459" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: green;">Low Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 54.02 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 10</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.975679</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.591831</p>         </div>         </div>`)[0];
+                popup_c4488ca0f845671d4233014096c95c78.setContent(html_264bdd60d8777f52290ba9ec39c99459);
+            
+        
+
+        circle_marker_3acb394523758c53fb33b6c6aaf27b29.bindPopup(popup_c4488ca0f845671d4233014096c95c78)
+        ;
+
+        
+    
+    
+            circle_marker_3acb394523758c53fb33b6c6aaf27b29.bindTooltip(
+                `<div>
+                     Low: 54.0 km/h, 10 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_cd9c0bc37dab87fb0c24164f4249f1c5 = L.circleMarker(
+                [12.975445, 77.598566],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_a9c60d39e06f19aa8b797fba7712385d = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_103e46d3d4f67fab0cd5b0c9db9823f3 = $(`<div id="html_103e46d3d4f67fab0cd5b0c9db9823f3" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 12.49 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 55</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.975445</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.598566</p>         </div>         </div>`)[0];
+                popup_a9c60d39e06f19aa8b797fba7712385d.setContent(html_103e46d3d4f67fab0cd5b0c9db9823f3);
+            
+        
+
+        circle_marker_cd9c0bc37dab87fb0c24164f4249f1c5.bindPopup(popup_a9c60d39e06f19aa8b797fba7712385d)
+        ;
+
+        
+    
+    
+            circle_marker_cd9c0bc37dab87fb0c24164f4249f1c5.bindTooltip(
+                `<div>
+                     High: 12.5 km/h, 55 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_bb27f59a752d9bf23dc35bd1c94c7103 = L.circleMarker(
+                [12.974722, 77.595249],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_0108ae72f7dc2af6f1c18684274de04e = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_000102e25e3c1f9d4fdef2a6c64ad4ce = $(`<div id="html_000102e25e3c1f9d4fdef2a6c64ad4ce" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 11.72 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 54</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.974722</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.595249</p>         </div>         </div>`)[0];
+                popup_0108ae72f7dc2af6f1c18684274de04e.setContent(html_000102e25e3c1f9d4fdef2a6c64ad4ce);
+            
+        
+
+        circle_marker_bb27f59a752d9bf23dc35bd1c94c7103.bindPopup(popup_0108ae72f7dc2af6f1c18684274de04e)
+        ;
+
+        
+    
+    
+            circle_marker_bb27f59a752d9bf23dc35bd1c94c7103.bindTooltip(
+                `<div>
+                     High: 11.7 km/h, 54 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_e7cfbd09487ffb4f54aa6f9bc4c1c5c1 = L.circleMarker(
+                [12.975512, 77.597356],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.399999999999999, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_bb27fd4af503ac386712d4709d15110c = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_db6dd426248feaaafd9e812c72246a9e = $(`<div id="html_db6dd426248feaaafd9e812c72246a9e" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: red;">High Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 19.49 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 47</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.975512</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.597356</p>         </div>         </div>`)[0];
+                popup_bb27fd4af503ac386712d4709d15110c.setContent(html_db6dd426248feaaafd9e812c72246a9e);
+            
+        
+
+        circle_marker_e7cfbd09487ffb4f54aa6f9bc4c1c5c1.bindPopup(popup_bb27fd4af503ac386712d4709d15110c)
+        ;
+
+        
+    
+    
+            circle_marker_e7cfbd09487ffb4f54aa6f9bc4c1c5c1.bindTooltip(
+                `<div>
+                     High: 19.5 km/h, 47 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_e844732dc8a345e1728a9b48e2c057c1 = L.circleMarker(
+                [12.969677, 77.591747],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.2, "stroke": true, "weight": 2}
+            ).addTo(marker_cluster_bd288afb21a4c28924df144fada1c677);
+        
+    
+        var popup_149589252979a845b44b457d4db46bc8 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_f33c16714a5dd2e8e033597479438b49 = $(`<div id="html_f33c16714a5dd2e8e033597479438b49" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 200px;">             <h4 style="margin: 5px 0; color: orange;">Medium Congestion</h4>             <hr style="margin: 5px 0;">             <p style="margin: 3px 0;"><b>Speed:</b> 37.98 km/h</p>             <p style="margin: 3px 0;"><b>Vehicles:</b> 26</p>             <p style="margin: 3px 0;"><b>Location:</b></p>             <p style="margin: 3px 0; font-size: 0.9em;">Lat: 12.969677</p>             <p style="margin: 3px 0; font-size: 0.9em;">Lon: 77.591747</p>         </div>         </div>`)[0];
+                popup_149589252979a845b44b457d4db46bc8.setContent(html_f33c16714a5dd2e8e033597479438b49);
+            
+        
+
+        circle_marker_e844732dc8a345e1728a9b48e2c057c1.bindPopup(popup_149589252979a845b44b457d4db46bc8)
+        ;
+
+        
+    
+    
+            circle_marker_e844732dc8a345e1728a9b48e2c057c1.bindTooltip(
+                `<div>
+                     Medium: 38.0 km/h, 26 vehicles
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            marker_cluster_bd288afb21a4c28924df144fada1c677.addTo(map_8b35a8b356eda48ed391c7284675e28d);
+        
+    
+            var heat_map_3fc374412b7b05ec6695ac4c146e5ae9 = L.heatLayer(
+                [[12.974979, 77.603199, 3], [12.970474, 77.601984, 3], [12.977412, 77.594391, 3], [12.977051, 77.596117, 2], [12.970592, 77.597696, 2], [12.969514, 77.596802, 3], [12.977251, 77.59265, 3], [12.972238, 77.597418, 1], [12.971703, 77.599045, 1], [12.976411, 77.591591, 1], [12.970521, 77.592671, 2], [12.97666, 77.595141, 2], [12.973265, 77.597423, 3], [12.976348, 77.592808, 1], [12.976669, 77.597436, 2], [12.977333, 77.59742, 1], [12.969389, 77.591666, 2], [12.975654, 77.603126, 2], [12.972617, 77.592259, 2], [12.970613, 77.599976, 3], [12.968518, 77.592977, 2], [12.974166, 77.595544, 2], [12.971021, 77.591954, 2], [12.971332, 77.592788, 2], [12.971896, 77.599832, 1], [12.975679, 77.591831, 1], [12.975445, 77.598566, 3], [12.974722, 77.595249, 3], [12.975512, 77.597356, 3], [12.969677, 77.591747, 2]],
+                {"blur": 15, "gradient": {"0.2": "blue", "0.4": "lime", "0.6": "orange", "1": "red"}, "maxZoom": 18, "minOpacity": 0.2, "radius": 25}
+            );
+        
+    
+            heat_map_3fc374412b7b05ec6695ac4c146e5ae9.addTo(map_8b35a8b356eda48ed391c7284675e28d);
+        
+    
+            var layer_control_b16475f5d232fccbac8df686b12170cf_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_da1186e110cff28dadef4df28e6dfa9e,
+                    "cartodbpositron" : tile_layer_c4ec1782f733dac3d1316f16be6d890d,
+                    "cartodbdarkmatter" : tile_layer_8e55a2345423b636bc3a33f2f76255f2,
+                },
+                overlays :  {
+                    "macro_element_bd288afb21a4c28924df144fada1c677" : marker_cluster_bd288afb21a4c28924df144fada1c677,
+                    "macro_element_3fc374412b7b05ec6695ac4c146e5ae9" : heat_map_3fc374412b7b05ec6695ac4c146e5ae9,
+                },
+            };
+            let layer_control_b16475f5d232fccbac8df686b12170cf = L.control.layers(
+                layer_control_b16475f5d232fccbac8df686b12170cf_layers.base_layers,
+                layer_control_b16475f5d232fccbac8df686b12170cf_layers.overlays,
+                {"autoZIndex": true, "collapsed": true, "position": "topright"}
+            ).addTo(map_8b35a8b356eda48ed391c7284675e28d);
+
+        
+</script>
+</html>

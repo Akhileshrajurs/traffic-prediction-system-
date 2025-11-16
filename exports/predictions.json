@@ -1,0 +1,302 @@
+[
+  {
+    "latitude": 12.974979,
+    "longitude": 77.603199,
+    "speed(kmph)": 9.67,
+    "vehicle_count": 52,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 0.985
+  },
+  {
+    "latitude": 12.970474,
+    "longitude": 77.601984,
+    "speed(kmph)": 8.65,
+    "vehicle_count": 42,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 1.0
+  },
+  {
+    "latitude": 12.977412,
+    "longitude": 77.594391,
+    "speed(kmph)": 6.66,
+    "vehicle_count": 55,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 0.895
+  },
+  {
+    "latitude": 12.977051,
+    "longitude": 77.596117,
+    "speed(kmph)": 26.8,
+    "vehicle_count": 27,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.845
+  },
+  {
+    "latitude": 12.970592,
+    "longitude": 77.597696,
+    "speed(kmph)": 41.65,
+    "vehicle_count": 27,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.58
+  },
+  {
+    "latitude": 12.969514,
+    "longitude": 77.596802,
+    "speed(kmph)": 13.54,
+    "vehicle_count": 48,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 0.945
+  },
+  {
+    "latitude": 12.977251,
+    "longitude": 77.59265,
+    "speed(kmph)": 12.11,
+    "vehicle_count": 55,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 0.88
+  },
+  {
+    "latitude": 12.972238,
+    "longitude": 77.597418,
+    "speed(kmph)": 54.36,
+    "vehicle_count": 21,
+    "hour_of_day": 16,
+    "congestion_level": "Low",
+    "marker_color": "green",
+    "confidence": 0.97
+  },
+  {
+    "latitude": 12.971703,
+    "longitude": 77.599045,
+    "speed(kmph)": 49.66,
+    "vehicle_count": 19,
+    "hour_of_day": 16,
+    "congestion_level": "Low",
+    "marker_color": "green",
+    "confidence": 0.92
+  },
+  {
+    "latitude": 12.976411,
+    "longitude": 77.591591,
+    "speed(kmph)": 44.68,
+    "vehicle_count": 10,
+    "hour_of_day": 16,
+    "congestion_level": "Low",
+    "marker_color": "green",
+    "confidence": 0.965
+  },
+  {
+    "latitude": 12.970521,
+    "longitude": 77.592671,
+    "speed(kmph)": 58.82,
+    "vehicle_count": 26,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.565
+  },
+  {
+    "latitude": 12.97666,
+    "longitude": 77.595141,
+    "speed(kmph)": 37.45,
+    "vehicle_count": 29,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.875
+  },
+  {
+    "latitude": 12.973265,
+    "longitude": 77.597423,
+    "speed(kmph)": 6.71,
+    "vehicle_count": 53,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 0.95
+  },
+  {
+    "latitude": 12.976348,
+    "longitude": 77.592808,
+    "speed(kmph)": 47.78,
+    "vehicle_count": 11,
+    "hour_of_day": 16,
+    "congestion_level": "Low",
+    "marker_color": "green",
+    "confidence": 0.965
+  },
+  {
+    "latitude": 12.976669,
+    "longitude": 77.597436,
+    "speed(kmph)": 44.32,
+    "vehicle_count": 25,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.52
+  },
+  {
+    "latitude": 12.977333,
+    "longitude": 77.59742,
+    "speed(kmph)": 47.87,
+    "vehicle_count": 18,
+    "hour_of_day": 16,
+    "congestion_level": "Low",
+    "marker_color": "green",
+    "confidence": 0.99
+  },
+  {
+    "latitude": 12.969389,
+    "longitude": 77.591666,
+    "speed(kmph)": 36.94,
+    "vehicle_count": 37,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.915
+  },
+  {
+    "latitude": 12.975654,
+    "longitude": 77.603126,
+    "speed(kmph)": 25.55,
+    "vehicle_count": 44,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.595
+  },
+  {
+    "latitude": 12.972617,
+    "longitude": 77.592259,
+    "speed(kmph)": 28.19,
+    "vehicle_count": 41,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.7
+  },
+  {
+    "latitude": 12.970613,
+    "longitude": 77.599976,
+    "speed(kmph)": 16.72,
+    "vehicle_count": 41,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 1.0
+  },
+  {
+    "latitude": 12.968518,
+    "longitude": 77.592977,
+    "speed(kmph)": 23.13,
+    "vehicle_count": 39,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.825
+  },
+  {
+    "latitude": 12.974166,
+    "longitude": 77.595544,
+    "speed(kmph)": 26.45,
+    "vehicle_count": 42,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.67
+  },
+  {
+    "latitude": 12.971021,
+    "longitude": 77.591954,
+    "speed(kmph)": 23.37,
+    "vehicle_count": 26,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.98
+  },
+  {
+    "latitude": 12.971332,
+    "longitude": 77.592788,
+    "speed(kmph)": 33.77,
+    "vehicle_count": 34,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.99
+  },
+  {
+    "latitude": 12.971896,
+    "longitude": 77.599832,
+    "speed(kmph)": 42.11,
+    "vehicle_count": 21,
+    "hour_of_day": 16,
+    "congestion_level": "Low",
+    "marker_color": "green",
+    "confidence": 0.895
+  },
+  {
+    "latitude": 12.975679,
+    "longitude": 77.591831,
+    "speed(kmph)": 54.02,
+    "vehicle_count": 10,
+    "hour_of_day": 16,
+    "congestion_level": "Low",
+    "marker_color": "green",
+    "confidence": 0.95
+  },
+  {
+    "latitude": 12.975445,
+    "longitude": 77.598566,
+    "speed(kmph)": 12.49,
+    "vehicle_count": 55,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 0.955
+  },
+  {
+    "latitude": 12.974722,
+    "longitude": 77.595249,
+    "speed(kmph)": 11.72,
+    "vehicle_count": 54,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 0.975
+  },
+  {
+    "latitude": 12.975512,
+    "longitude": 77.597356,
+    "speed(kmph)": 19.49,
+    "vehicle_count": 47,
+    "hour_of_day": 16,
+    "congestion_level": "High",
+    "marker_color": "red",
+    "confidence": 0.88
+  },
+  {
+    "latitude": 12.969677,
+    "longitude": 77.591747,
+    "speed(kmph)": 37.98,
+    "vehicle_count": 26,
+    "hour_of_day": 16,
+    "congestion_level": "Medium",
+    "marker_color": "orange",
+    "confidence": 0.935
+  }
+]
